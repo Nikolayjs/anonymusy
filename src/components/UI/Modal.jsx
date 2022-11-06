@@ -34,6 +34,16 @@ const Modal = ({ modal, onChange, userId }) => {
   }, []);
 
   const validatorConfig = {
+    firstName: {
+      isRequired: {
+        message: 'Поле обязательно для заполнения',
+      },
+    },
+    secondName: {
+      isRequired: {
+        message: 'Поле обязательно для заполнения',
+      },
+    },
     age: {
       isCorrectAge: {
         message: 'Возраст введён некорректно',
@@ -103,17 +113,17 @@ const Modal = ({ modal, onChange, userId }) => {
                   <Input
                     title="Имя"
                     inputId="firstName"
-                    place={user.firstName}
+                    place={errors.firstName}
                     value={user.firstName}
-                    isRequired={false}
+                    errors={errors.firstName}
                     onChange={(e) => handleChange(e, e.target.id)}
                   />
                   <Input
                     title="Фамилия"
                     inputId="secondName"
-                    place={user.secondName}
+                    place={errors.secondName}
                     value={user.secondName}
-                    isRequired={false}
+                    errors={errors.secondName}
                     onChange={(e) => handleChange(e, e.target.id)}
                   />
                   <Input
@@ -121,7 +131,6 @@ const Modal = ({ modal, onChange, userId }) => {
                     inputId="prof"
                     place={user.prof}
                     value={user.prof}
-                    isRequired={false}
                     onChange={(e) => handleChange(e, e.target.id)}
                   />
                   <Input
@@ -130,7 +139,6 @@ const Modal = ({ modal, onChange, userId }) => {
                     place={user.age}
                     value={user.age}
                     type="number"
-                    isRequired={false}
                     errors={errors.age}
                     onChange={(e) => handleChange(e, e.target.id)}
                   />
@@ -140,7 +148,6 @@ const Modal = ({ modal, onChange, userId }) => {
                     inputId="url"
                     place={user.url}
                     value={user.url}
-                    isRequired={false}
                     errors={errors.url}
                     onChange={(e) => handleChange(e, e.target.id)}
                   />
@@ -149,7 +156,6 @@ const Modal = ({ modal, onChange, userId }) => {
                     inputId="avatar"
                     place={user.avatar}
                     value={user.avatar}
-                    isRequired={false}
                     errors={errors.message}
                     onChange={(e) => handleChange(e, e.target.id)}
                   />
