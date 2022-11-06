@@ -4,8 +4,21 @@ export function validator(data, config) {
     const date = new Date();
     let statusValidate;
     switch (validateMethod) {
+      case 'isRequired':
+        if (typeof data === 'boolean') {
+          statusValidate = !data;
+        } else {
+          statusValidate = data.trim() === '';
+        }
+        break;
       case 'isCorrectAge': {
-        statusValidate = Number(data) < date.getFullYear() && Number(data) > 1900;
+        statusValidate = Number(data) > date.getFullYear() || Number(data) < 1900;
+        break;
+      }
+      case 'isCorrectUrl': {
+        const urlRegex =
+          /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+        statusValidate = !urlRegex.test(data);
         break;
       }
       default:

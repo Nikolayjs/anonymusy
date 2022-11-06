@@ -6,16 +6,13 @@ import { useHistory } from 'react-router-dom';
 import { validator } from '../../utils/validator';
 
 const Modal = ({ modal, onChange, userId }) => {
-  const [data, setData] = useState({
-    age: '',
-  });
+  const [data, setData] = useState();
   const [errors, setErrors] = useState({});
   const history = useHistory();
   const [user, setUser] = useState();
 
   const handleUpdate = (e) => {
     e.preventDefault();
-
     const updatedUser = {
       ...user,
     };
@@ -24,9 +21,12 @@ const Modal = ({ modal, onChange, userId }) => {
     onChange('hidden');
   };
 
-  const handleSubmit = () => {
-    const isValid = validate();
-    if (!isValid) return;
+  const handleChange = (e, id) => {
+    setData((prevState) => ({
+      ...prevState,
+      [id]: e.target.value,
+    }));
+    setUser({ ...user, [id]: e.target.value });
   };
 
   useEffect(() => {
@@ -37,6 +37,11 @@ const Modal = ({ modal, onChange, userId }) => {
     age: {
       isCorrectAge: {
         message: 'Возраст введён некорректно',
+      },
+    },
+    url: {
+      isCorrectUrl: {
+        message: 'Адрес введён некорректно',
       },
     },
   };
@@ -53,12 +58,9 @@ const Modal = ({ modal, onChange, userId }) => {
 
   const isValid = Object.keys(errors).length === 0;
 
-  const handleChange = (e, id) => {
-    setData((prevState) => ({
-      ...prevState,
-      [id]: e.target.value,
-    }));
-    setUser({ ...user, [id]: e.target.value });
+  const handleSubmit = () => {
+    const isValid = validate();
+    if (!isValid) return;
   };
 
   if (user) {
@@ -103,9 +105,7 @@ const Modal = ({ modal, onChange, userId }) => {
                     inputId="firstName"
                     place={user.firstName}
                     value={user.firstName}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     isRequired={false}
-                    errors={errors.message}
                     onChange={(e) => handleChange(e, e.target.id)}
                   />
                   <Input
@@ -113,9 +113,7 @@ const Modal = ({ modal, onChange, userId }) => {
                     inputId="secondName"
                     place={user.secondName}
                     value={user.secondName}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     isRequired={false}
-                    errors={errors.message}
                     onChange={(e) => handleChange(e, e.target.id)}
                   />
                   <Input
@@ -123,42 +121,34 @@ const Modal = ({ modal, onChange, userId }) => {
                     inputId="prof"
                     place={user.prof}
                     value={user.prof}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     isRequired={false}
-                    errors={errors.message}
+                    onChange={(e) => handleChange(e, e.target.id)}
+                  />
+                  <Input
+                    title="Год рождения"
+                    inputId="age"
+                    place={user.age}
+                    value={user.age}
+                    type="number"
+                    isRequired={false}
+                    errors={errors.age}
                     onChange={(e) => handleChange(e, e.target.id)}
                   />
 
-                  {!isValid ? (
-                    <Input
-                      title="Год рождения"
-                      inputId="age"
-                      place={user.age}
-                      value={user.age}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                      isRequired={false}
-                      errors={errors.message}
-                      onChange={(e) => handleChange(e, e.target.id)}
-                    />
-                  ) : (
-                    <Input
-                      title="Год рождения введён некорректно"
-                      inputId="age"
-                      place={user.age}
-                      value={user.age}
-                      className="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400"
-                      isRequired={false}
-                      errors={errors.message}
-                      onChange={(e) => handleChange(e, e.target.id)}
-                    />
-                  )}
-
+                  <Input
+                    title="Адрес"
+                    inputId="url"
+                    place={user.url}
+                    value={user.url}
+                    isRequired={false}
+                    errors={errors.url}
+                    onChange={(e) => handleChange(e, e.target.id)}
+                  />
                   <Input
                     title="Аватар"
                     inputId="avatar"
                     place={user.avatar}
                     value={user.avatar}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     isRequired={false}
                     errors={errors.message}
                     onChange={(e) => handleChange(e, e.target.id)}
@@ -167,7 +157,7 @@ const Modal = ({ modal, onChange, userId }) => {
                   <button
                     type="submit"
                     onClick={handleSubmit}
-                    disabled={isValid}
+                    disabled={!isValid}
                     className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
                     Обновить

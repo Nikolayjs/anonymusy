@@ -1,10 +1,12 @@
 import Input from './Input';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { validator } from '../../utils/validator';
 
 const CreateUser = ({ modal, onChange }) => {
   const history = useHistory();
   const [users, setUsers] = useState(JSON.parse(localStorage.getItem('users')));
+  const [errors, setErrors] = useState({});
   const [newUser, setNewUser] = useState({
     id: '',
     firstName: '',
@@ -14,13 +16,48 @@ const CreateUser = ({ modal, onChange }) => {
     prof: '',
     avatar: '',
   });
-  const [allUsers, setAllUsers] = useState(users.length + 1);
+  const [allUsers] = useState(users.length + 1);
+
   useEffect(() => {
     setNewUser({ ...newUser, id: allUsers.toString() });
   }, [users]);
 
   const handleChange = (e, id) => {
     setNewUser({ ...newUser, [id]: e.target.value });
+  };
+
+  const validatorConfig = {
+    firstName: {
+      isRequired: {
+        message: 'Поле обязательно для заполнения',
+      },
+    },
+    secondName: {
+      isRequired: {
+        message: 'Поле обязательно для заполнения',
+      },
+    },
+    age: {
+      isCorrectAge: {
+        message: 'Возраст введён некорректно',
+      },
+    },
+  };
+
+  useEffect(() => {
+    validate();
+  }, [newUser]);
+
+  const validate = () => {
+    const errors = validator(newUser, validatorConfig);
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+  const isValid = Object.keys(errors).length === 0;
+
+  const handleSubmit = () => {
+    const isValid = validate();
+    if (!isValid) return;
   };
   const handleCreate = (e) => {
     e.preventDefault();
@@ -71,7 +108,7 @@ const CreateUser = ({ modal, onChange }) => {
                   inputId="firstName"
                   place=""
                   value={newUser && newUser.firstName}
-                  isRequired={true}
+                  errors={errors.firstName}
                   onChange={(e) => handleChange(e, e.target.id)}
                 />
                 <Input
@@ -79,15 +116,16 @@ const CreateUser = ({ modal, onChange }) => {
                   inputId="secondName"
                   place=""
                   value={newUser && newUser.secondName}
-                  isRequired={true}
+                  errors={errors.secondName}
                   onChange={(e) => handleChange(e, e.target.id)}
                 />
                 <Input
                   title="Год рождения"
                   inputId="age"
                   place=""
+                  type="number"
+                  errors={errors.age}
                   value={newUser && newUser.age}
-                  isRequired={true}
                   onChange={(e) => handleChange(e, e.target.id)}
                 />
                 <Input
@@ -95,7 +133,6 @@ const CreateUser = ({ modal, onChange }) => {
                   inputId="url"
                   place=""
                   value={newUser && newUser.url}
-                  isRequired={false}
                   onChange={(e) => handleChange(e, e.target.id)}
                 />
                 <Input
@@ -103,7 +140,6 @@ const CreateUser = ({ modal, onChange }) => {
                   inputId="prof"
                   place=""
                   value={newUser && newUser.prof}
-                  isRequired={false}
                   onChange={(e) => handleChange(e, e.target.id)}
                 />
                 <Input
@@ -111,11 +147,12 @@ const CreateUser = ({ modal, onChange }) => {
                   inputId="avatar"
                   place=""
                   value={newUser && newUser.avatar}
-                  isRequired={false}
                   onChange={(e) => handleChange(e, e.target.id)}
                 />
                 <button
                   type="submit"
+                  disabled={!isValid}
+                  onClick={handleSubmit}
                   className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Создать карту
