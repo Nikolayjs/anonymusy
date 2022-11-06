@@ -5,7 +5,7 @@ export function validator(data, config) {
     let statusValidate;
     switch (validateMethod) {
       case 'isCorrectAge': {
-        statusValidate = Number(data) < date.getFullYear();
+        statusValidate = Number(data) < date.getFullYear() && Number(data) > 1900;
         break;
       }
       default:

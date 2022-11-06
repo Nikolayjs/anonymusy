@@ -22,7 +22,7 @@ const Card = ({ avatar, name, surName, age, userId, onChange }) => {
           <Link to={`/users/${userId}`}>
             <Button text="Изменить" />
           </Link>
-          <Button text="Удалить" onClick={() => onChange(userId)} id={userId} />
+          <Button text="Удалить" onClick={() => onChange(userId)} />
         </div>
       </div>
     </div>
