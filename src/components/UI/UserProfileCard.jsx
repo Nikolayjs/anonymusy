@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import decl from '../../utils/decl';
 import Modal from './Modal';
 
 const UserProfileCard = ({ name, surName, avatar, prof, age, onChange, url, userId }) => {
+  const date = new Date();
   const [modal, setModal] = useState('hidden');
   const handleModal = (mode) => {
     setModal(mode);
@@ -20,7 +22,12 @@ const UserProfileCard = ({ name, surName, avatar, prof, age, onChange, url, user
           </h5>
           <span className="text-sm text-gray-500 dark:text-gray-400">{prof}</span>
           <span className="text-sm font-bold text-gray-500 dark:text-gray-400">
-            Год рождения: {age}
+            Год рождения:{' '}
+            {`${age} (${date.getFullYear() - age} ${decl(date.getFullYear() - age, [
+              'год',
+              'года',
+              'лет',
+            ])})`}
           </span>
           <span className="text-sm font-bold text-gray-500 dark:text-gray-400">
             Ссылка на портфолио:
