@@ -2,7 +2,9 @@ import React from 'react';
 import Button from './Button';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
-const Card = ({ avatar, name, surName, age, userId, onChange }) => {
+import decl from '../../utils/decl';
+const Card = ({ avatar, name, surName, age, userId, onChange, url, prof }) => {
+  const date = new Date();
   return (
     <div
       key={uuidv4()}
@@ -17,8 +19,19 @@ const Card = ({ avatar, name, surName, age, userId, onChange }) => {
             {`${name} ${surName}`}
           </h5>
         </Link>
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{age}</p>
-        <div className="flex justify-between">
+        <span className="font-normal text-gray-500 dark:text-gray-400 border-b border-blue-100">
+          {prof}
+        </span>
+        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{`Год рождения: ${age} (${
+          date.getFullYear() - age
+        } ${decl(date.getFullYear() - age, ['год', 'года', 'лет'])})`}</p>
+        <span className="text-md font-bold text-gray-500 dark:text-gray-400">
+          Ссылка на портфолио:
+          <p className="text-sm font-mono">
+            <a href={url}>{url}</a>
+          </p>
+        </span>
+        <div className="flex justify-between mt-3">
           <Link to={`/users/${userId}`}>
             <Button text="Изменить" />
           </Link>

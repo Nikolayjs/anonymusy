@@ -30,9 +30,11 @@ const List = () => {
           avatar={item.avatar}
           name={item.firstName}
           surName={item.secondName}
-          age={`Год рождения: ${item.age}`}
+          age={item.age}
           userId={item.id}
           onChange={handleDelete}
+          url={item.url}
+          prof={item.prof}
         />
       ))}
       <div className="max-w-lg mt-3 mx-auto">
